@@ -40,22 +40,27 @@ export default async function handleShopshopBotPhoto(db) {
             const adminsArr = await getShopBotAdminsFromDb(db);
 
             for (const admin of adminsArr) {
-                await shopBot.sendMessage(admin.chatId, '<b>Нове замовлення раків: </b>' + '\n\n' + 
-                    `Покупець: ${msg.from.first_name}. Username: ${msg.from.username ? `@${msg.from.username}` : '<code>НЕТУ ЮЗЕРНЕЙМА</code>'}, Telegram ID: <code>${chatId}</code>` + '\n \n' +
-                    `Піб отримувача: <b>${receiverName}</b>` + '\n' +
-                    `Місто: <i>${receiverCity}</i>`  + '\n' +
-                    `Доставка: <i>${deliveryInfo}</i>` + '\n' +
-                    `Номер телефону: <code>${receiverPhoneNumber}</code>` + '\n\n' +
-                    `Вага раків: <b>${orderWeightInKilos}</b>` + '\n' +
-                    `Розмір раків: <b>${category.name}</b>` + '\n' +
-                    `Замовник хоче: <i>${isCooked}</i> раки` + '\n \n' +
-                    `Тип варіння раків: <i>${cookingType}</i>` + '\n \n' +
-                    
-                    `Сумма замовлення: <b><u>${finalCost}</u></b> грн` , {
-                    parse_mode: "HTML"
-                });
 
-                await shopBot.forwardMessage(admin.chatId, chatId, msg.message_id);
+                try {
+                    await shopBot.sendMessage(admin.chatId, '<b>Нове замовлення раків: </b>' + '\n\n' + 
+                        `Покупець: ${msg.from.first_name}. Username: ${msg.from.username ? `@${msg.from.username}` : '<code>НЕТУ ЮЗЕРНЕЙМА</code>'}, Telegram ID: <code>${chatId}</code>` + '\n \n' +
+                        `Піб отримувача: <b>${receiverName}</b>` + '\n' +
+                        `Місто: <i>${receiverCity}</i>`  + '\n' +
+                        `Доставка: <i>${deliveryInfo}</i>` + '\n' +
+                        `Номер телефону: <code>${receiverPhoneNumber}</code>` + '\n\n' +
+                        `Вага раків: <b>${orderWeightInKilos}</b>` + '\n' +
+                        `Розмір раків: <b>${category.name}</b>` + '\n' +
+                        `Замовник хоче: <i>${isCooked}</i> раки` + '\n \n' +
+                        `Тип варіння раків: <i>${cookingType}</i>` + '\n \n' +
+                        
+                        `Сумма замовлення: <b><u>${finalCost}</u></b> грн` , {
+                        parse_mode: "HTML"
+                    });
+    
+                    await shopBot.forwardMessage(admin.chatId, chatId, msg.message_id);
+                } catch (e) {
+                    console.log(e);
+                }
             }
 
             return await shopBot.sendMessage(chatId, '<b>Ваше замовлення і квитанція успішно надіслані адміністрації</b>' + '\n\n' + 
